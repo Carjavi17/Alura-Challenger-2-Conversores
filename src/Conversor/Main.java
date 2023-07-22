@@ -36,6 +36,16 @@ public class Main {
 	    }
 
 	    public static void convertirTemperatura() {
+	    	String temperaturaStr = JOptionPane.showInputDialog(null, "Ingrese la temperatura en la escala original (Celsius):");
+
+	        if (temperaturaStr == null || temperaturaStr.isEmpty()) {
+	            JOptionPane.showMessageDialog(null, "No se ingresó un valor válido.", "Error", JOptionPane.ERROR_MESSAGE);
+	            System.exit(0);
+	        }
+
+	        double temperaturaCelsius = Double.parseDouble(temperaturaStr);
+	        double temperaturaFahrenheit = (temperaturaCelsius * 9 / 5) + 32;
+	        JOptionPane.showMessageDialog(null, temperaturaCelsius + " grados Celsius equivalen a " + temperaturaFahrenheit + " grados Fahrenheit.");
 
 	    }
 
