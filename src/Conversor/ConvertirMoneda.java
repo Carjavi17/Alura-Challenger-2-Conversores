@@ -1,8 +1,7 @@
 package Conversor;
 
 public class ConvertirMoneda {
-	double valor;
-	
+	double valor;	
 	
 	public double Convertir(double valoraConvertir,double tasadeCambio ) {
 		

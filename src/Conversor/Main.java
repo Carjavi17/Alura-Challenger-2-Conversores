@@ -7,11 +7,17 @@ import javax.swing.JOptionPane;
 public class Main {
 
 	 public static void main(String[] args) {
-	        String opciones[] = {"Conversor de Moneda", "Conversor de Temperatura", "Conversor de Longitud"};
-	        String op = (String) JOptionPane.showInputDialog(null, "Elija una Opción", "Menu", JOptionPane.DEFAULT_OPTION, null, opciones, opciones[0]);
+	        String opciones[] = {"Conversor de Moneda", "Conversor de Temperatura", "Conversor de Longitud", "Salir"};
+	        boolean continuar = true;
 
-	        if (op != null) {
-	            if (op.equals("Conversor de Moneda")) {
+	        while (continuar) {
+	            String op = (String) JOptionPane.showInputDialog(
+	                null, "Elija una Opción", "Menu", JOptionPane.DEFAULT_OPTION, null, opciones, opciones[0]
+	            );
+
+	            if (op == null || op.equals("Salir")) {
+	                continuar = false; 
+	            } else if (op.equals("Conversor de Moneda")) {
 	                convertirMoneda();
 	            } else if (op.equals("Conversor de Temperatura")) {
 	                convertirTemperatura();
@@ -20,7 +26,13 @@ public class Main {
 	            } else {
 	                JOptionPane.showMessageDialog(null, "Opción inválida.", "Error", JOptionPane.ERROR_MESSAGE);
 	            }
+	            int opcionContinuar = JOptionPane.showConfirmDialog(null, "¿Desea continuar?", "Continuar", JOptionPane.YES_NO_OPTION);
+	            if (opcionContinuar == JOptionPane.NO_OPTION) {
+	                continuar = false;
+	            }
 	        }
+
+	        JOptionPane.showMessageDialog(null, "Gracias por utilizar el conversor. ¡Hasta luego!");
 	    }
 
 	    public static void convertirMoneda() {
@@ -59,12 +71,11 @@ public class Main {
 		            } else {
 		                JOptionPane.showMessageDialog(null, "Opción inválida.", "Error", JOptionPane.ERROR_MESSAGE);
 		            }
-		        }    
-
+		        }
 	    }
 
 	    public static void convertirTemperatura() {
-	    	String temperaturaenGrados = JOptionPane.showInputDialog(null, "Ingrese la temperatura en la escala original (Celsius):");
+	    	String temperaturaenGrados = JOptionPane.showInputDialog(null, "Ingrese el valor de la temperatura a convertir: ");
 	    	double temperaturaIngresada = 0.0;
 	    	String resultadoFormateado;
 	    	ConvertirTemperatura temperatura = new ConvertirTemperatura();
@@ -111,17 +122,43 @@ public class Main {
 	    }
 
 	    public static void convertirLongitud() {
-	    	String longitudStr = JOptionPane.showInputDialog(null, "Ingrese la longitud en la unidad original (metros):");
-
-	        if (longitudStr == null || longitudStr.isEmpty()) {
+	    	String longitud = JOptionPane.showInputDialog(null, "Ingrese el valor de la longitud a convertir: ");
+	    	double longitudIngresada = 0.0;
+	    	String resultadoFormateado;
+	    	ConvertirLongitud longitudaConvertir = new ConvertirLongitud();
+	    	
+	        if (longitud == null || longitud.isEmpty()) {
 	            JOptionPane.showMessageDialog(null, "No se ingresó un valor válido.", "Error", JOptionPane.ERROR_MESSAGE);
 	            System.exit(0);
 	        }
+	         try {
+	        	 longitudIngresada = Double.parseDouble(longitud);
 
-	        double longitudMetros = Double.parseDouble(longitudStr);
-	        double longitudKilometros = longitudMetros / 1000;
-	        JOptionPane.showMessageDialog(null, longitudMetros + " metros equivalen a " + longitudKilometros + " kilómetros.");
-
+	         } catch (NumberFormatException e) {
+	             JOptionPane.showMessageDialog(null, "El valor ingresado no es un número válido.", "Error", JOptionPane.ERROR_MESSAGE);
+	             System.exit(0);
+	         }
+	         
+	         String opciones[] = {"De milimetros a centimetros", "De centimetros a milimetros", "De centimetros a metros", "De metros a centimetros"};
+	         String op = (String) JOptionPane.showInputDialog(null, "Elija una Opción", "Menu", JOptionPane.DEFAULT_OPTION, null, opciones, opciones[0]);
+	         DecimalFormat decimalFormat = new DecimalFormat("#.##");
+	         
+	         if (op != null) {
+		            if (op.equals("De milimetros a centimetros")) {
+			         resultadoFormateado = decimalFormat.format(longitudaConvertir.ConvertirMilimetrosaCentimetros(longitudIngresada));
+			         JOptionPane.showMessageDialog(null, longitudIngresada+ " En milimetros corresponde a " + resultadoFormateado + " en centimetros.");
+		            } else if (op.equals("De centimetros a milimetros")) {
+			         resultadoFormateado = decimalFormat.format(longitudaConvertir.ConvertirCentimetrosaMilimetros(longitudIngresada));
+			         JOptionPane.showMessageDialog(null, longitudIngresada+ " En centimetros corresponde a " + resultadoFormateado + " en milimetros.");
+		            } else if (op.equals("De centimetros a metros")) {
+			         resultadoFormateado = decimalFormat.format(longitudaConvertir.ConvertirCentimetrosaMetros(longitudIngresada));
+			         JOptionPane.showMessageDialog(null, longitudIngresada+ " En centimetros corresponde a " + resultadoFormateado + " en metros.");
+		            } else if (op.equals("De metros a centimetros")) {
+				         resultadoFormateado = decimalFormat.format(longitudaConvertir.ConvertirMetrosaCentimetros(longitudIngresada));
+				         JOptionPane.showMessageDialog(null, longitudIngresada+ " En metros corresponde a " + resultadoFormateado + " en centimetros.");
+		            } else {
+		                JOptionPane.showMessageDialog(null, "Opción inválida.", "Error", JOptionPane.ERROR_MESSAGE);
+		            }
+		        }	        
 	    }
-
 }
