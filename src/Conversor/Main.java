@@ -8,7 +8,6 @@ public class Main {
 
 	 public static void main(String[] args) {
 	        String opciones[] = {"Conversor de Moneda", "Conversor de Temperatura", "Conversor de Longitud"};
-
 	        String op = (String) JOptionPane.showInputDialog(null, "Elija una Opción", "Menu", JOptionPane.DEFAULT_OPTION, null, opciones, opciones[0]);
 
 	        if (op != null) {
@@ -26,31 +25,36 @@ public class Main {
 
 	    public static void convertirMoneda() {
 	    	 String montoEnPesos = JOptionPane.showInputDialog(null, "Ingrese en pesos el monto que desea convertir");
-	    	 double montoIngresado = Double.parseDouble(montoEnPesos);
+	    	 double montoIngresado = 0.0;
+	    	 String resultadoFormateado;
+	    	 ConvertirMoneda moneda = new ConvertirMoneda();
 	    	 
 	         if (montoEnPesos == null || montoEnPesos.isEmpty()) {
 	             JOptionPane.showMessageDialog(null, "No se ingresó un valor válido.", "Error", JOptionPane.ERROR_MESSAGE);
 	             System.exit(0);
 	         }
+	         
+	         try {
+	             montoIngresado  = Double.parseDouble(montoEnPesos);
+
+	         } catch (NumberFormatException e) {
+	             JOptionPane.showMessageDialog(null, "El valor ingresado no es un número válido.", "Error", JOptionPane.ERROR_MESSAGE);
+	             System.exit(0);
+	         }         
+	         
 	         String opciones[] = {"De pesos a Dolar", "De pesos a Euros", "De pesos a Reales"};
 	         String op = (String) JOptionPane.showInputDialog(null, "Elija una Opción", "Menu", JOptionPane.DEFAULT_OPTION, null, opciones, opciones[0]);
 	         DecimalFormat decimalFormat = new DecimalFormat("#.##");
 	         
 	         if (op != null) {
 		            if (op.equals("De pesos a Dolar")) {
-		   	         double tasaDeCambio = 520;
-			         double montoEnDolares = montoIngresado / tasaDeCambio;
-			         String resultadoFormateado = decimalFormat.format(montoEnDolares);
+			         resultadoFormateado = decimalFormat.format(moneda.Convertir(montoIngresado, 520));
 			         JOptionPane.showMessageDialog(null, montoIngresado+ " En pesos Argentinos corresponde a " + resultadoFormateado + " en dolares Americanos.");
 		            } else if (op.equals("De pesos a Euros")) {
-		   	         double tasaDeCambio = 575;
-			         double montoEnEuros = montoIngresado / tasaDeCambio;
-			         String resultadoFormateado = decimalFormat.format(montoEnEuros);
+			         resultadoFormateado = decimalFormat.format(moneda.Convertir(montoIngresado, 575));
 			         JOptionPane.showMessageDialog(null, montoIngresado+ " En pesos Argentinos corresponde a " + resultadoFormateado + " en Euros.");
 		            } else if (op.equals("De pesos a Reales")) {
-		   	         double tasaDeCambio = 56;
-			         double montoEnReales = montoIngresado / tasaDeCambio;
-			         String resultadoFormateado = decimalFormat.format(montoEnReales);
+			         resultadoFormateado = decimalFormat.format(moneda.Convertir(montoIngresado, 56));
 			         JOptionPane.showMessageDialog(null, montoIngresado+ " En pesos Argentinos corresponde a " + resultadoFormateado + " en Reales.");
 		            } else {
 		                JOptionPane.showMessageDialog(null, "Opción inválida.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -60,17 +64,50 @@ public class Main {
 	    }
 
 	    public static void convertirTemperatura() {
-	    	String temperaturaStr = JOptionPane.showInputDialog(null, "Ingrese la temperatura en la escala original (Celsius):");
-
-	        if (temperaturaStr == null || temperaturaStr.isEmpty()) {
+	    	String temperaturaenGrados = JOptionPane.showInputDialog(null, "Ingrese la temperatura en la escala original (Celsius):");
+	    	double temperaturaIngresada = 0.0;
+	    	String resultadoFormateado;
+	    	ConvertirTemperatura temperatura = new ConvertirTemperatura();
+	    	
+	        if (temperaturaenGrados == null || temperaturaenGrados.isEmpty()) {
 	            JOptionPane.showMessageDialog(null, "No se ingresó un valor válido.", "Error", JOptionPane.ERROR_MESSAGE);
 	            System.exit(0);
 	        }
+	         try {
+	             temperaturaIngresada  = Double.parseDouble(temperaturaenGrados);
 
-	        double temperaturaCelsius = Double.parseDouble(temperaturaStr);
-	        double temperaturaFahrenheit = (temperaturaCelsius * 9 / 5) + 32;
-	        JOptionPane.showMessageDialog(null, temperaturaCelsius + " grados Celsius equivalen a " + temperaturaFahrenheit + " grados Fahrenheit.");
-
+	         } catch (NumberFormatException e) {
+	             JOptionPane.showMessageDialog(null, "El valor ingresado no es un número válido.", "Error", JOptionPane.ERROR_MESSAGE);
+	             System.exit(0);
+	         }
+	         
+	         String opciones[] = {"De Celsius a Fahrenheit", "De Fahrenheit a Celsius", "De Celsius a Kelvin", "De Kelvin a Celsius", "De Kelvin a Fahrenheit", "De Fahrenheit a Kelvin"};
+	         String op = (String) JOptionPane.showInputDialog(null, "Elija una Opción", "Menu", JOptionPane.DEFAULT_OPTION, null, opciones, opciones[0]);
+	         DecimalFormat decimalFormat = new DecimalFormat("#.##");
+	         
+	         if (op != null) {
+		            if (op.equals("De Celsius a Fahrenheit")) {
+		            	resultadoFormateado = decimalFormat.format(temperatura.ConvertirCelsiusaFahrenheit(temperaturaIngresada));
+		    	        JOptionPane.showMessageDialog(null, temperaturaIngresada + " grados Celsius equivalen a " + resultadoFormateado + " grados Fahrenheit.");
+		            } else if (op.equals("De Fahrenheit a Celsius")) {
+		            	resultadoFormateado = decimalFormat.format(temperatura.ConvertirFahrenheitaCelsius(temperaturaIngresada));
+		    	        JOptionPane.showMessageDialog(null, temperaturaIngresada + " grados Fahrenheit equivalen a " + resultadoFormateado + " grados Celsius.");
+		            } else if (op.equals("De Celsius a Kelvin")) {
+		            	resultadoFormateado = decimalFormat.format(temperatura.ConvertirCelsiusaKelvin(temperaturaIngresada));
+		    	        JOptionPane.showMessageDialog(null, temperaturaIngresada + " grados Celsius equivalen a " + resultadoFormateado + " grados Kelvin.");
+		            } else if (op.equals("De Kelvin a Celsius")) {
+		            	resultadoFormateado = decimalFormat.format(temperatura.ConvertirKelvinaCelsius(temperaturaIngresada));
+		    	        JOptionPane.showMessageDialog(null, temperaturaIngresada + " grados Kelvin equivalen a " + resultadoFormateado + " grados Celsius.");
+		            }else if (op.equals("De Kelvin a Fahrenheit")) {
+		            	resultadoFormateado = decimalFormat.format(temperatura.ConvertirKelvinaFahrenheit(temperaturaIngresada));
+		    	        JOptionPane.showMessageDialog(null, temperaturaIngresada + " grados Kelvin equivalen a " + resultadoFormateado + " grados Fahrenheit.");
+		            }else if (op.equals("De Fahrenheit a Kelvin")) {
+		            	resultadoFormateado = decimalFormat.format(temperatura.ConvertirFahrenheitaKelvin(temperaturaIngresada));
+		    	        JOptionPane.showMessageDialog(null, temperaturaIngresada + " grados Fahrenheit equivalen a " + resultadoFormateado + " grados Kelvin.");
+		            }else {
+		                JOptionPane.showMessageDialog(null, "Opción inválida.", "Error", JOptionPane.ERROR_MESSAGE);
+		            }
+		        }
 	    }
 
 	    public static void convertirLongitud() {
