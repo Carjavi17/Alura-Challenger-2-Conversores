@@ -1,5 +1,5 @@
 # Alura-Challenger-2-Conversores
-Challenger de Alura de Conversores de Monead, Temperatura y Longitud.
+Challenger de Alura de Conversores de Moneda, Temperatura y Longitud.
 
 Este programa es un conversor que te permite convertir entre distintas unidades:  moneda, temperatura y longitud.
 
